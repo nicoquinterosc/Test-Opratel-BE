@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Menu {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  parentId    Int?
+  status      Int           @default(0)
+  parent      Menu?         @relation("parentId", fields: [parentId], references: [id])
+  children    Menu[]        @relation("parentId")
+  MenusToUser MenusToUser[]
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  username    String        @unique
+  name        String
+  lastname    String
+  email       String        @unique
+  password    String
+  status      Int           @default(0)
+  MenusToUser MenusToUser[]
+}
+
+model MenusToUser {
+  menuId Int
+  userId Int
+  user   User? @relation(fields: [userId], references: [id])
+  menu   Menu? @relation(fields: [menuId], references: [id])
+
+  @@id([userId, menuId])
+}
