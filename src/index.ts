@@ -1,5 +1,6 @@
 import express from 'express';
 import MenusRoutes from './routes/menus-routes';
+import UsersRoutes from './routes/users-routes';
 
 const PORT = 3000;
 
@@ -11,6 +12,7 @@ app.get('/ping', (_req, res) => {
 })
 
 app.use('/menus', MenusRoutes);
+app.use('/users', UsersRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

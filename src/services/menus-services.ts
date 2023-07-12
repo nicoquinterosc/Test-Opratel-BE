@@ -6,22 +6,20 @@ const prisma = new PrismaClient();
 let filteredMenus: MenuResponse[] = [];
 
 export async function foundByName(name: string) {
-    const menu = await prisma.menu.findUnique({
+    return await prisma.menu.findUnique({
         where: {
             name: name,
         }
     });
-    return menu;
 }
 
 export async function foundByID(id: number) {
-    const menu = await prisma.menu.findFirst({
+    return await prisma.menu.findFirst({
         where: {
             id: id,
             status: 1
         }
     });
-    return menu;
 }
 
 export async function addMenu(menuBody: MenuRequest): Promise<number> {
