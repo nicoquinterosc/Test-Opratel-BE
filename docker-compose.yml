@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  db:
+    container_name: mysql
+    hostname: root
+    image: mysql:8.0
+    platform: "linux/amd64"
+    environment:
+      MYSQL_DATABASE: database
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+  app:
+    container_name: test-be
+    build:
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
