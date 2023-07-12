@@ -65,7 +65,7 @@ async function deleteChildren(parentId: number) {
     }
 }
 
-export async function updateMenu(id: number, name: string, parentId: number | undefined) {
+export async function updateMenu(id: number, name: string, parentId: number | null) {
     return await prisma.menu.update({
         where: {
             id: id,

@@ -20,7 +20,7 @@ router.delete('/delete/:id',
 router.put('/update/:id',
     param('id').exists().isNumeric(),
     body('name').notEmpty().isString(),
-    body('parentId').optional().isNumeric(),
+    body('parentId').optional({ nullable: true }).isNumeric(),
     validate,
     MenusController.updateMenu);
 

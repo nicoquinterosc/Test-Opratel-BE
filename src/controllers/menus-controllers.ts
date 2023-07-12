@@ -1,6 +1,6 @@
 import { Request, Response } from 'express-serve-static-core';
 import * as MenusServices from '../services/menus-services';
-import { MenuRequest, MenuResponse } from '../shared/types';
+import { Menu, MenuRequest, MenuResponse } from '../shared/types';
 
 export async function addMenu(req: Request, res: Response) {
     try {
@@ -53,22 +53,20 @@ export async function updateMenu(req: Request, res: Response) {
             throw new Error(`Menu with id ${id} not found`);
         }
 
-        let { name, parentId } = req.body;
-        const newNameMenu = await MenusServices.foundByName(name);
+        const menuBody: Menu = req.body;
+        const newNameMenu = await MenusServices.foundByName(menuBody.name);
         if (newNameMenu) {
-            throw new Error(`Menu ${name} already exists`);
+            throw new Error(`Menu ${menuBody.name} already exists`);
         }
 
-        if (!parentId) {
-            parentId = menu.parentId;
-        } else {
-            const parentMenu = await MenusServices.foundByID(parentId);
+        if (menuBody.parentId) {
+            const parentMenu = await MenusServices.foundByID(menuBody.parentId);
             if (!parentMenu) {
-                throw new Error(`Parent menu with id ${parentId} not found`);
+                throw new Error(`Parent menu with id ${menuBody.parentId} not found`);
             }
         }
 
-        await MenusServices.updateMenu(id, name, parentId);
+        await MenusServices.updateMenu(id, menuBody.name, menuBody.parentId);
         console.log(`Menu ${id} updated successfully`);
         return res.status(200).json({ msg: `Menu ${id} updated successfully` });
 

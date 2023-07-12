@@ -1,19 +1,29 @@
 import { PrismaClient } from '@prisma/client';
-import { UserRequest } from '../shared/types';
+import { User, UserRequest } from '../shared/types';
 
 const prisma = new PrismaClient();
 
-export async function foundByUsernameEmail(username: string, email: string) {
+export async function foundByUsername(username: string) {
+    return await prisma.user.findUnique({
+        where: {
+            username: username,
+        }
+    });
+}
+
+export async function foundByEmail(email: string) {
+    return await prisma.user.findUnique({
+        where: {
+            email: email,
+        }
+    });
+}
+
+export async function foundByID(id: number) {
     return await prisma.user.findFirst({
         where: {
-            OR: [
-                {
-                    username: username
-                },
-                {
-                    email: email
-                }
-            ]
+            id: id,
+            status: 1
         }
     });
 }
@@ -30,4 +40,37 @@ export async function addUser(userBody: UserRequest): Promise<number> {
         }
     })
     return newuser.id;
+}
+
+export async function deleteUser(id: number) {
+    return await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            status: 0,
+        },
+    });
+}
+
+export function validateBody(body: User): boolean {
+    if (!body.name && !body.lastname && !body.email && !body.password && !body.username) {
+        return false;
+    }
+    return true;
+}
+
+export async function updateUser(user: User) {
+    return await prisma.user.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            name: user.name,
+            lastname: user.lastname,
+            email: user.email,
+            username: user.username,
+            password: user.password
+        }
+    });
 }
