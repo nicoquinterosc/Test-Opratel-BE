@@ -1,7 +1,8 @@
 import express from 'express';
 import { validate } from '../shared/utils';
 import { body, param } from 'express-validator';
-import * as UsersController from '../controllers/users-controllers';
+import * as UsersControllers from '../controllers/users-controllers';
+import { authMiddleware } from '../controllers/auth-controllers';
 
 const router = express.Router();
 
@@ -13,12 +14,14 @@ router.post('/add',
     body('password').notEmpty().isString(),
     body('status').optional().isNumeric(),
     validate,
-    UsersController.addUser);
+    authMiddleware,
+    UsersControllers.addUser);
 
 router.delete('/delete/:id',
     param('id').exists().isNumeric(),
     validate,
-    UsersController.deleteUser);
+    authMiddleware,
+    UsersControllers.deleteUser);
 
 router.put('/update/:id',
     param('id').exists().isNumeric(),
@@ -28,19 +31,23 @@ router.put('/update/:id',
     body('email').optional().isString().isEmail(),
     body('password').optional().isString(),
     validate,
-    UsersController.updateUser);
+    authMiddleware,
+    UsersControllers.updateUser);
 
 router.get('/:id/menus',
-    UsersController.getUserMenus);
+    authMiddleware,
+    UsersControllers.getUserMenus);
 
 router.get('/:id',
     param('id').isNumeric(),
     validate,
-    UsersController.getUser);
+    authMiddleware,
+    UsersControllers.getUser);
 
 router.post('/:id/menus',
     body('menuIds').notEmpty().isArray(),
     validate,
-    UsersController.addMenuToUser)
+    authMiddleware,
+    UsersControllers.addMenuToUser);
 
 export default router;

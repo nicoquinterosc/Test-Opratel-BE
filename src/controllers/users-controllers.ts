@@ -137,6 +137,8 @@ export async function addMenuToUser(req: Request, res: Response) {
             throw new Error(`At least one menuId is required`);
         }
 
+        await UsersServices.deleteMenusFromUser(userId);
+
         for (const menuId of menuIds) {
             if (isNaN(menuId)) {
                 throw new Error(`${menuId} is not a number`);

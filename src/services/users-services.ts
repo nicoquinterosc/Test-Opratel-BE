@@ -90,6 +90,14 @@ async function getUserMenusIds(userId: number) {
     });
 }
 
+export async function deleteMenusFromUser(userId: number) {
+    return await prisma.menusToUser.deleteMany({
+        where: {
+            userId: userId,
+        },
+    });
+}
+
 export async function addMenuToUser(userId: number, menuId: number) {
     return await prisma.menusToUser.create({
         data: {
