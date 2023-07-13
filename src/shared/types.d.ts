@@ -24,3 +24,8 @@ export interface User {
 export interface UserRequest extends User {
     status: number
 }
+
+export interface UserMenu {
+    userId: number
+    menuId: number
+}

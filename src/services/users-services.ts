@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { User, UserRequest } from '../shared/types';
+import { User, UserRequest, UserMenu } from '../shared/types';
+import { getAllMenus } from './menus-services';
 
 const prisma = new PrismaClient();
 
@@ -71,6 +72,29 @@ export async function updateUser(user: User) {
             email: user.email,
             username: user.username,
             password: user.password
+        }
+    });
+}
+
+export async function getUserMenus(userId: number, filter: string | null) {
+    const userMenusIds = <UserMenu[]>await getUserMenusIds(userId);
+    const menuIds = userMenusIds.map(userMenuId => userMenuId.menuId);
+    return await getAllMenus(filter, menuIds);
+}
+
+async function getUserMenusIds(userId: number) {
+    return await prisma.menusToUser.findMany({
+        where: {
+            userId: userId
+        }
+    });
+}
+
+export async function addMenuToUser(userId: number, menuId: number) {
+    return await prisma.menusToUser.create({
+        data: {
+            userId: userId,
+            menuId: menuId
         }
     });
 }

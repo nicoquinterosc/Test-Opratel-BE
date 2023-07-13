@@ -30,4 +30,17 @@ router.put('/update/:id',
     validate,
     UsersController.updateUser);
 
+router.get('/:id/menus',
+    UsersController.getUserMenus);
+
+router.get('/:id',
+    param('id').isNumeric(),
+    validate,
+    UsersController.getUser);
+
+router.post('/:id/menus',
+    body('menuIds').notEmpty().isArray(),
+    validate,
+    UsersController.addMenuToUser)
+
 export default router;

@@ -77,7 +77,7 @@ export async function updateMenu(id: number, name: string, parentId: number | nu
     });
 }
 
-export async function getAllMenus(filter: string | null): Promise<MenuResponse[]> {
+export async function getAllMenus(filter: string | null, menuIds?: number[]): Promise<MenuResponse[]> {
 
     let menusRaw = await prisma.menu.findMany({
         where: {
@@ -116,22 +116,22 @@ export async function getAllMenus(filter: string | null): Promise<MenuResponse[]
     }
 
     let topLevelMenus = menus.filter(menu => !menu.parentId);
-    if (filter) {
+    if (filter || menuIds?.length) {
         filteredMenus = [];
-        topLevelMenus = filterMenus(topLevelMenus, filter);
+        topLevelMenus = filterMenus(topLevelMenus, filter, menuIds);
         topLevelMenus = sortMenus(topLevelMenus);
     }
     return topLevelMenus;
 }
 
-function filterMenus(menus: MenuResponse[], filter: string): MenuResponse[] {
+function filterMenus(menus: MenuResponse[], filter: string | null, menuIds?: number[]): MenuResponse[] {
 
     for (const menu of menus) {
-        if (menu.name.includes(filter)) {
+        if ((!menuIds || menuIds.includes(menu.id!)) && (!filter || menu.name.toLowerCase().includes(filter.toLowerCase()))) {
             filteredMenus.push(menu);
         } else {
             if (menu.children?.length) {
-                filterMenus(menu.children || [], filter);
+                filterMenus(menu.children || [], filter, menuIds);
             }
         }
     }
