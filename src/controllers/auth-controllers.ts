@@ -4,11 +4,15 @@ import * as AuthServices from '../services/auth-services';
 export async function login(req: Request, res: Response) {
     try {
         const { username, password } = req.body;
-        const result: { check: boolean, token: string } = await AuthServices.validateCredentials(username, password);
+        const result: {
+            check: boolean,
+            firstName: string,
+            lastName: string, token: string
+        } = await AuthServices.validateCredentials(username, password);
         if (result.check) {
-            return res.status(200).json({ msg: 'Login successful', token: result.token });
+            return res.status(200).json({ msg: 'Login successful', token: result.token, firstName: result.firstName, lastName: result.lastName });
         }
-        return res.status(401).json({ msg: 'Invalid credentials', token: result.token });
+        return res.status(401).json({ msg: 'Invalid credentials', token: result.token, firstName: result.firstName, lastName: result.lastName });
 
     } catch (e) {
         console.error(e.message);

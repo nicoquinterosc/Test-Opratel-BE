@@ -153,3 +153,15 @@ export async function addMenuToUser(req: Request, res: Response) {
         return res.status(400).json(e.message);
     }
 }
+
+export async function getAllUsers(req: Request, res: Response) {
+    try {
+        const filter: string | null = req.query.filter?.toString() ?? null;
+        const users = await UsersServices.getAllUsers(filter);
+        return res.status(200).json({ users });
+
+    } catch (e) {
+        console.error(e.message);
+        return res.status(400).json(e.message);
+    }
+}

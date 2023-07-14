@@ -106,3 +106,26 @@ export async function addMenuToUser(userId: number, menuId: number) {
         }
     });
 }
+
+export async function getAllUsers(filter: string | null) {
+    let usersRaw = await prisma.user.findMany({
+        where: {
+            status: 1,
+        }
+    });
+
+    let users = usersRaw.map(user => {
+        const { password, status, ...userResponse } = user;
+        return userResponse;
+    });
+
+    if (filter) {
+        users = users.filter(user =>
+            user.email.toLowerCase().includes(filter.toLowerCase())
+            || user.username.toLowerCase().includes(filter.toLowerCase())
+            || user.name.toLowerCase().includes(filter.toLowerCase())
+            || user.lastname.toLowerCase().includes(filter.toLowerCase())
+        );
+    }
+    return users;
+}

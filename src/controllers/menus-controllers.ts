@@ -96,7 +96,7 @@ export async function getAllMenus(req: Request, res: Response) {
     try {
         const filter: string | null = req.query.filter?.toString() ?? null;
         const menus: MenuResponse[] = await MenusServices.getAllMenus(filter);
-        return res.status(200).json(menus);
+        return res.status(200).json({ menus });
 
     } catch (e) {
         console.error(e.message);

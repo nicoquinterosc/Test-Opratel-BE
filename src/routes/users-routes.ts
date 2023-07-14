@@ -34,6 +34,9 @@ router.put('/update/:id',
     authMiddleware,
     UsersControllers.updateUser);
 
+router.get('/all',
+UsersControllers.getAllUsers);
+
 router.get('/:id/menus',
     authMiddleware,
     UsersControllers.getUserMenus);

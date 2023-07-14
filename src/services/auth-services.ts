@@ -3,22 +3,28 @@ import { foundByUsername } from './users-services';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export async function validateCredentials(username: string, password: string): Promise<{ check: boolean, token: string }> {
+export async function validateCredentials(username: string, password: string): Promise<{ check: boolean, firstName: string, lastName: string, token: string }> {
     let authenticated = false;
+    let firstName = '';
+    let lastName = '';
+
     if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
         authenticated = true;
+        firstName = 'Admin';
     } else {
         const user = await foundByUsername(username);
         if (user && user.password === password) {
             authenticated = true;
+            firstName = user.name;
+            lastName = user.lastname;
         }
     }
 
     if (authenticated) {
         const token = generateToken();
-        return { check: true, token: token };
+        return { check: true, firstName: firstName, lastName: lastName, token: token };
     }
-    return { check: false, token: "" };
+    return { check: false, firstName: '', lastName: '', token: '' };
 }
 
 function generateToken(): string {

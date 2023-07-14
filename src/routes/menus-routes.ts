@@ -29,7 +29,6 @@ router.put('/update/:id',
     MenusControllers.updateMenu);
 
 router.get('/all',
-    authMiddleware,
     MenusControllers.getAllMenus);
 
 router.get('/:id',
