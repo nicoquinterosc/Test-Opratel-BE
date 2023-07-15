@@ -115,7 +115,7 @@ export async function getAllUsers(filter: string | null) {
     });
 
     let users = usersRaw.map(user => {
-        const { password, status, ...userResponse } = user;
+        const { status, ...userResponse } = user;
         return userResponse;
     });
 

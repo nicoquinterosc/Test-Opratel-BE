@@ -7,19 +7,19 @@ export async function addMenu(req: Request, res: Response) {
         const menuBody: MenuRequest = req.body;
         const menu = await MenusServices.foundByName(menuBody.name);
         if (menu) {
-            throw new Error(`Menu ${menuBody.name} already exists`);
+            throw new Error(`Menu ${menuBody.name} already exists.`);
         }
 
         if (menuBody.parentId) {
             const parentMenu = await MenusServices.foundByID(menuBody.parentId);
             if (!parentMenu) {
-                throw new Error(`Parent menu with id ${menuBody.parentId} not found`);
+                throw new Error(`Parent menu with id ${menuBody.parentId} not found.`);
             }
         }
 
         const id: number = await MenusServices.addMenu(menuBody);
-        console.log(`Menu ${id} added successfully`);
-        return res.status(200).json({ msg: 'Menu created successfully', id });
+        console.log(`Menu ${id} added successfully.`);
+        return res.status(200).json({ msg: 'Menu created successfully.', id });
 
     } catch (e) {
         console.error(e.message);
@@ -32,12 +32,12 @@ export async function deleteMenu(req: Request, res: Response) {
         const id = +req.params.id;
         const menu = await MenusServices.foundByID(id);
         if (!menu) {
-            throw new Error(`Menu with id ${id} not found`);
+            throw new Error(`Menu with id ${id} not found.`);
         }
 
         await MenusServices.deleteMenu(id);
-        console.log(`Menu ${id} deleted successfully`);
-        return res.status(200).json({ msg: `Menu ${id} deleted successfully` });
+        console.log(`Menu ${id} deleted successfully.`);
+        return res.status(200).json({ msg: `Menu ${id} deleted successfully.` });
 
     } catch (e) {
         console.error(e.message);
@@ -50,25 +50,25 @@ export async function updateMenu(req: Request, res: Response) {
         const id = +req.params.id;
         const menu = await MenusServices.foundByID(id);
         if (!menu) {
-            throw new Error(`Menu with id ${id} not found`);
+            throw new Error(`Menu with id ${id} not found.`);
         }
 
         const menuBody: Menu = req.body;
         const newNameMenu = await MenusServices.foundByName(menuBody.name);
         if (newNameMenu) {
-            throw new Error(`Menu ${menuBody.name} already exists`);
+            throw new Error(`Menu ${menuBody.name} already exists.`);
         }
 
         if (menuBody.parentId) {
             const parentMenu = await MenusServices.foundByID(menuBody.parentId);
             if (!parentMenu) {
-                throw new Error(`Parent menu with id ${menuBody.parentId} not found`);
+                throw new Error(`Parent menu with id ${menuBody.parentId} not found.`);
             }
         }
 
         await MenusServices.updateMenu(id, menuBody.name, menuBody.parentId);
-        console.log(`Menu ${id} updated successfully`);
-        return res.status(200).json({ msg: `Menu ${id} updated successfully` });
+        console.log(`Menu ${id} updated successfully.`);
+        return res.status(200).json({ msg: `Menu ${id} updated successfully.` });
 
     } catch (e) {
         console.error(e.message);
@@ -81,7 +81,7 @@ export async function getMenu(req: Request, res: Response) {
         const id = +req.params.id;
         const menu = <MenuRequest>await MenusServices.foundByID(id);
         if (!menu) {
-            throw new Error(`Menu with id ${id} not found`);
+            throw new Error(`Menu with id ${id} not found.`);
         }
 
         return res.status(200).json(menu);
