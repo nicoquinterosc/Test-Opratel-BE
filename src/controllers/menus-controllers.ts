@@ -11,10 +11,16 @@ export async function addMenu(req: Request, res: Response) {
         }
 
         if (menuBody.parentId) {
+            if (isNaN(menuBody.parentId)) {
+                throw new Error(`${menuBody.parentId} is not a number.`);
+            }
+            menuBody.parentId = +menuBody.parentId;
             const parentMenu = await MenusServices.foundByID(menuBody.parentId);
             if (!parentMenu) {
                 throw new Error(`Parent menu with id ${menuBody.parentId} not found.`);
             }
+        } else {
+            menuBody.parentId = null;
         }
 
         const id: number = await MenusServices.addMenu(menuBody);
@@ -60,10 +66,16 @@ export async function updateMenu(req: Request, res: Response) {
         }
 
         if (menuBody.parentId) {
+            if (isNaN(menuBody.parentId)) {
+                throw new Error(`${menuBody.parentId} is not a number.`);
+            }
+            menuBody.parentId = +menuBody.parentId;
             const parentMenu = await MenusServices.foundByID(menuBody.parentId);
             if (!parentMenu) {
                 throw new Error(`Parent menu with id ${menuBody.parentId} not found.`);
             }
+        } else {
+            menuBody.parentId = null;
         }
 
         await MenusServices.updateMenu(id, menuBody.name, menuBody.parentId);

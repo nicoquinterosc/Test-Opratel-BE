@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/add',
     body('name').notEmpty().isString(),
-    body('parentId').optional().isNumeric(),
+    body('parentId').optional({ nullable: true }),
     body('status').optional().isNumeric(),
     validate,
     authMiddleware,
@@ -23,7 +23,7 @@ router.delete('/delete/:id',
 router.put('/update/:id',
     param('id').exists().isNumeric(),
     body('name').notEmpty().isString(),
-    body('parentId').optional({ nullable: true }).isNumeric(),
+    body('parentId').optional({ nullable: true }),
     validate,
     authMiddleware,
     MenusControllers.updateMenu);
